@@ -56,6 +56,8 @@ include(src/CMakeLists.txt)
 add_library(hipsparse ${hipsparse_source} ${hipsparse_headers_public})
 add_library(roc::hipsparse ALIAS hipsparse)
 
+set ( CMAKE_SHARED_LINKER_FLAGS "-Wl,--rpath,$ENV{ROCM_RPATH}" )
+
 # Target compile definitions
 if(NOT BUILD_CUDA)
   target_compile_definitions(hipsparse PRIVATE __HIP_PLATFORM_HCC__)
@@ -87,7 +89,8 @@ else()
 endif()
 
 # Target properties
-rocm_set_soversion(hipsparse ${hipsparse_SOVERSION})
+set_target_properties(hipsparse PROPERTIES SOVERSION ${LIB_VERSION_MAJOR} )
+set_target_properties(hipsparse PROPERTIES VERSION ${LIB_VERSION_STRING} )
 set_target_properties(hipsparse PROPERTIES CXX_EXTENSIONS NO)
 set_target_properties(hipsparse PROPERTIES CXX_VISIBILITY_PRESET "hidden" VISIBILITY_INLINES_HIDDEN ON)
 set_target_properties(hipsparse PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/staging")
