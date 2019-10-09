@@ -59,7 +59,14 @@ include(cmake/Dependencies.cmake)
 
 # Setup version
 rocm_setup_version(VERSION 1.0.9)
-set(hipsparse_SOVERSION 0.1)
+set( LIB_VERSION_MAJOR 0 )
+set( LIB_VERSION_MINOR 1 )
+if (DEFINED ENV{ROCM_LIBPATCH_VERSION})
+set (LIB_VERSION_PATCH $ENV{ROCM_LIBPATCH_VERSION})
+else ()
+set (LIB_VERSION_PATCH 0)
+endif()
+set (LIB_VERSION_STRING "${LIB_VERSION_MAJOR}.${LIB_VERSION_MINOR}.${LIB_VERSION_PATCH}")
 
 # hipSPARSE library
 add_subdirectory(library)
